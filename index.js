@@ -1,46 +1,61 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './App.css';
 
 
-function MyForm(props) {
-  const [username, setUsername] = useState("");
-  const [age, setAge] = useState("");
-  const [addres, setAddres] = useState("");
-  const [gender, setGender] = useState("perempuan");
-
-  const mySubmitHandler = (e) => {
-    e.preventDefault();
-    if (!Number(age)) {
-        alert("Usia harus berupa angka");
+class MyForm extends React.Component {
+  constructor(props){
+super(props);
+    this.state = {username: '', age: null, gender : 'perempuan', address : ''};
+  }
+  mySubmitHandler = (event) => {
+      event.preventDefault();
+        let age = this.state.age;
+        if (!Number(age)) {
+          alert("Usia harus berupa angka");
         }else {
-         alert("Data terkirim")
-      console.log(username)
-
-      var formValue = {
-        username: username,
-        age: age,
-        addres: addres,
-        gender: gender,
+          alert("Data terkirim")
+          console.log(this.state);
+        }
       }
-      console.log(formValue);
-    }
-  };
+  myChangeHandler = (event) => {
+    const nam = event.target.name;
+    const val = event.target.value;
+  
+    this.setState({address: event.target.address})
+    this.setState({[nam]: val});
+  }
+  
+  render() {
+    return (
+      <form onSubmit={this.mySubmitHandler}>
+      <h1>Hello {this.state.username} {this.state.age}</h1>
+      <p>Enter your name:</p>
+      <input
+        type='text'
+        name='username'
+        onChange={this.myChangeHandler}
+      />
+      <p>Enter your age:</p>
+      <input
+        type='text'
+        name='age'
+        onChange={this.myChangeHandler}
+      />
 
-  return (
-    <form onSubmit={mySubmitHandler}>
-      <p>Masukan Nama:</p>
-      <input type="text" name="username" onChange={(e)=>{setUsername(e.target.value)}} />
-      <p>Masukan Usia Anda: </p>
-      <input type="text" name="age" onChange={(e)=>{setAge(e.target.value)}} />
       <p>Gender : </p>
-          <select name="gender" value={gender} onChange={(e)=>{setGender(e.target.value)}}>
-          <option value="perempuan">Perempuan</option>
-          <option value="laki-laki">Laki-Laki </option>
-        </select>
-      <p>Alamat: </p>
-      <input type="textarea" name="addres" value={props.addres} onChange={(e)=>{setAddres(e.target.value)}} />
-      <input type="submit" value="Submit" />
-    </form>
-  );
+      <select name="gender" value={this.state.gender} onChange={this.myChangeHandler}>
+       <option value="perempuan">Perempuan</option>
+       <option value="laki-laki">Laki-Laki </option>
+       </select>
+       <p>Alamat :</p>
+       <input type="textarea" name="address" value={this.state.address} onChange={this.myChangeHandler}/>
+       <input type='submit' />
+      </form>
+    );
+  }
 }
-ReactDOM.render(<MyForm />, document.getElementById("root"));
+
+ReactDOM.render(<MyForm />, document.getElementById('root'));
+
+export default MyForm;
